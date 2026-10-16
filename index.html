@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xyroclast Digital Systems — Business Portfolio & Documentation</title>
+    
+    <style>
+        /* Editorial Minimalist Theme Variables */
+        :root {
+            --bg: #121212;
+            --surface: #18181b;
+            --surface-hover: #222226;
+            --text: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --accent: #f59e0b; /* Warm Bronze / Amber */
+            --accent-hover: #d97706;
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        [data-theme="light"] {
+            --bg: #fbfbfb;
+            --surface: #ffffff;
+            --surface-hover: #f4f4f5;
+            --text: #09090b;
+            --text-muted: #71717a;
+            --border: #e4e4e7;
+            --accent: #d97706;
+            --accent-hover: #b45309;
+            --modal-overlay: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        /* Loading Screen Styles */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loadingScreen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        .loading-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-family: monospace;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            opacity: 0.98;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .icon-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        section {
+            padding: 7rem 0 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        h1, h2, h3 {
+            letter-spacing: -0.02em;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            line-height: 1.15;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            max-width: 800px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #000000;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background-color: var(--surface-hover);
+        }
+
+        /* Portfolio Cards */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s;
+        }
+
+        .portfolio-card:hover {
+            border-color: var(--text-muted);
+        }
+
+        .portfolio-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-card p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        /* Documentation & Billing Calculator */
+        .doc-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .field select, .field input, .field textarea {
+            width: 100%;
+            padding: 0.625rem;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .field select:focus, .field input:focus, .field textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .summary-card {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .total-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0.5rem 0 0.25rem 0;
+        }
+
+        .summary-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        /* Contact Section */
+        .contact-form {
+            max-width: 500px;
+            margin: 2rem auto 0 auto;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal / Developer Settings Panel */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 520px;
+            padding: 1.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateY(10px);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .dev-badge {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dev-team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.25rem;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.875rem;
+        }
+
+        .dev-member {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .dev-member-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dev-member-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .dev-member-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .toggle-switch label {
+            font-size: 0.875rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            transition: 0.2s;
+            border-radius: 22px;
+            pointer-events: none;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text);
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+            background-color: #000;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background-color: var(--surface);
+                border-bottom: 1px solid var(--border);
+                padding: 1.5rem;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .calculator-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen Overlay -->
+    <div id="loadingScreen">
+        <div class="spinner"></div>
+        <div class="loading-title">Xyroclast Digital Systems</div>
+        <div class="loading-subtitle">INITIALIZING SYSTEM ARCHITECTURE...</div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">xyroclast<span>.</span> systems</a>
+            
+            <div class="header-actions">
+                <!-- SVG Theme Toggle Button -->
+                <button class="icon-btn" id="themeBtn" aria-label="Toggle Theme" title="Toggle Theme">
+                    <svg id="themeIconSun" viewBox="0 0 24 24">
+                        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+                    </svg>
+                    <svg id="themeIconMoon" viewBox="0 0 24 24" style="display: none;">
+                        <path d="M12.3 2a10 10 0 0 0 9.7 11.5 10 10 0 1 1-11.7-11.5z"/>
+                    </svg>
+                </button>
+
+                <!-- Developer Settings Gear Button -->
+                <button class="icon-btn" id="devSettingsBtn" aria-label="Developer Settings" title="Settings">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c-.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/>
+                    </svg>
+                </button>
+
+                <button class="menu-toggle" id="menuBtn">&#9776;</button>
+            </div>
+
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#portfolio" class="active">Portfolio</a></li>
+                    <li><a href="#documentation">Documentation & Billing</a></li>
+                    <li><a href="#contact">Inquire</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="section-tag">Activity No. 5 Group Submission</div>
+            <h1>Functional Software Systems & Business Portfolio.</h1>
+            <p>Engineered with native web standards. Designed for scalable client operations, system transparency, and automated future billing documentation.</p>
+            <div class="btn-group">
+                <a href="#portfolio" class="btn btn-primary">Explore Portfolio</a>
+                <a href="#documentation" class="btn btn-secondary">View Billing Specs</a>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio">
+            <div class="section-tag">Selected Works</div>
+            <h2>Business Portfolio</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Production-ready web applications and architectural layouts.</p>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <div>
+                        <h3>LearnGate Portal</h3>
+                        <p>Real-time academic management ecosystem with role-based user access and cloud database synchronization.</p>
+                    </div>
+                    <span class="tech-tag">Full-Stack / Firebase</span>
+                </div>
+                <div class="portfolio-card">
+                    <div>
+                        <h3>Starfruit Express B2B</h3>
+                        <p>Optimized logistics web interface and operational dashboard redesign built for enterprise fulfillment tracking.</p>
+                    </div>
+                    <span class="tech-tag">UI/UX Architecture</span>
+                </div>
+                <div class="portfolio-card">
+                    <div>
+                        <h3>Liknayan AI</h3>
+                        <p>Lightweight conversational interface clone featuring modular prompts and custom system preferences.</p>
+                    </div>
+                    <span class="tech-tag">Web App / REST API</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation & Future Billing Calculator -->
+        <section id="documentation">
+            <div class="section-tag">Project Documentation</div>
+            <h2>Future Website Billing & Maintenance</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">Audit record for client cost projections and long-term service agreements.</p>
+
+            <div class="doc-box">
+                <h3 style="font-size: 1rem; margin-bottom: 0.25rem;">Interactive Maintenance & Setup Estimator</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Adjust parameters below to simulate recurring billing projections.</p>
+
+                <div class="calculator-layout">
+                    <div>
+                        <div class="field">
+                            <label for="tierSelect">System Architecture Tier</label>
+                            <select id="tierSelect">
+                                <option value="7500">Corporate Landing Page</option>
+                                <option value="16000" selected>Standard Web Application</option>
+                                <option value="38000">Enterprise Cloud Platform</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="maintSelect">SLA Maintenance Plan</label>
+                            <select id="maintSelect">
+                                <option value="1000">Basic Security & Backups (/ mo)</option>
+                                <option value="2500" selected>Standard Updates & SEO (/ mo)</option>
+                                <option value="5000">Managed Support & Scaling (/ mo)</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="monthsInput">Contract Duration (Months)</label>
+                            <input type="number" id="monthsInput" value="12" min="1" max="36">
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div>
+                            <span class="summary-desc">PROJECTED TOTAL BILLING</span>
+                            <div class="total-number" id="totalDisplay">₱46,000</div>
+                            <!-- Dynamic VAT Breakdown Row (Show/Hide) -->
+                            <div id="vatBreakdownRow" style="display: none; font-size: 0.8rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: 500;">
+                                + 12% VAT Applied: <span id="vatAmountDisplay">₱0</span>
+                            </div>
+                            <p class="summary-desc" id="breakdownDesc">Covers initial development setup plus 12 months of standard maintenance support.</p>
+                        </div>
+                        <button class="btn btn-primary" id="saveLogBtn" style="width: 100%; margin-top: 1rem;">Export Billing Record</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="section-tag">Get in Touch</div>
+            <h2>Client Inquiries</h2>
+
+            <div class="contact-form">
+                <form id="inquiryForm">
+                    <!-- Live Interactive Session Badge -->
+                    <div id="liveUserBadge" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--accent); border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.25rem;">
+                        <span id="badgeUser" style="font-weight: 700;"></span> — <span id="badgeEmail" style="color: var(--text-muted);"></span>
+                    </div>
+                    
+                    <!-- Separated Username Input -->
+                    <div class="field">
+                        <label for="usernameInput">Username</label>
+                        <input type="text" id="usernameInput" required placeholder="Ryker Zade">
+                    </div>
+
+                    <!-- Separated Gmail Input -->
+                    <div class="field">
+                        <label for="emailInput">Gmail Address</label>
+                        <input type="email" id="emailInput" required placeholder="user@gmail.com">
+                    </div>
+
+                    <div class="field">
+                        <label for="msg">Project Details</label>
+                        <textarea id="msg" required placeholder="Specify your system requirements..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Inquiry</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Developer Settings Modal -->
+    <div class="modal-overlay" id="devModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>Developer Controls</span>
+                    <span class="dev-badge">Activity No. 5</span>
+                </div>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                Developers
+            </p>
+
+            <div class="dev-team-list">
+                <div class="dev-member">
+                    <div class="dev-member-info">
+                        <span class="dev-member-name">Revilla, Sean Benedict C.</span>
+                        <span class="dev-member-role">Lead Full-Stack Engineer</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Solution & Concept Strategist</span>
+                </div>
+                <div class="dev-member">
+                    <div class="dev-member-info">
+                        <span class="dev-member-name">Padilla, Vincent Kelvin N.</span>
+                        <span class="dev-member-role">UI/UX Designer</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Design Systems Architect</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="currencySelect">Calculator Currency</label>
+                <select id="currencySelect">
+                    <option value="PHP" selected>Philippine Peso (₱)</option>
+                    <option value="USD">US Dollar ($)</option>
+                    <option value="EUR">Euro (€)</option>
+                </select>
+            </div>
+
+            <div class="toggle-switch">
+                <label for="vatToggle">Apply 12% VAT Tax Adjustment</label>
+                <label class="switch">
+                    <input type="checkbox" id="vatToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div style="background-color: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; color: var(--text-muted); font-family: monospace; margin-top: 1rem;">
+                ENV: Production-Native <br>
+                BUILD: v2.4.0-release <br>      
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Xyroclast Digital Systems. Native Web Architecture & Documentation.</p>
+        </div>
+    </footer>
+
+    <!-- Native JavaScript -->
+    <script>
+        // Loading Screen Handler
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-out');
+            }, 600); // 0.6 second aesthetic pause
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Logic with SVG icons
+            const themeBtn = document.getElementById('themeBtn');
+            const sunIcon = document.getElementById('themeIconSun');
+            const moonIcon = document.getElementById('themeIconMoon');
+            
+            const savedTheme = localStorage.getItem('xyro_theme') || 'dark';
+
+            function applyTheme(theme) {
+                if (theme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+            }
+
+            applyTheme(savedTheme);
+
+            themeBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const nextTheme = current === 'light' ? 'dark' : 'light';
+                localStorage.setItem('xyro_theme', nextTheme);
+                applyTheme(nextTheme);
+            });
+
+            // Developer Settings Modal Logic
+            const devSettingsBtn = document.getElementById('devSettingsBtn');
+            const devModal = document.getElementById('devModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            devSettingsBtn.addEventListener('click', () => {
+                devModal.classList.add('active');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                devModal.classList.remove('active');
+            });
+
+            devModal.addEventListener('click', (e) => {
+                if (e.target === devModal) {
+                    devModal.classList.remove('active');
+                }
+            });
+
+            // Mobile Menu Toggle
+            const menuBtn = document.getElementById('menuBtn');
+            const navLinks = document.getElementById('navLinks');
+
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => navLinks.classList.remove('active'));
+            });
+
+            // Interactive Separated Username & Email Real-time Feedback
+            const usernameInput = document.getElementById('usernameInput');
+            const emailInput = document.getElementById('emailInput');
+            const liveUserBadge = document.getElementById('liveUserBadge');
+            const badgeUser = document.getElementById('badgeUser');
+            const badgeEmail = document.getElementById('badgeEmail');
+
+            function updateLiveBadge() {
+                const usernameVal = usernameInput.value.trim();
+                const emailVal = emailInput.value.trim();
+
+                if (usernameVal || emailVal) {
+                    liveUserBadge.style.display = 'block';
+                    badgeUser.textContent = usernameVal || 'Anonymous User';
+                    badgeEmail.textContent = emailVal || 'no-email-provided';
+                } else {
+                    liveUserBadge.style.display = 'none';
+                }
+            }
+
+            usernameInput.addEventListener('input', updateLiveBadge);
+            emailInput.addEventListener('input', updateLiveBadge);
+
+            // Billing Calculator Logic with Multi-currency & VAT support (Show/Hide VAT Breakdown)
+            const tierSelect = document.getElementById('tierSelect');
+            const maintSelect = document.getElementById('maintSelect');
+            const monthsInput = document.getElementById('monthsInput');
+            const currencySelect = document.getElementById('currencySelect');
+            const vatToggle = document.getElementById('vatToggle');
+            const totalDisplay = document.getElementById('totalDisplay');
+            const breakdownDesc = document.getElementById('breakdownDesc');
+            const vatBreakdownRow = document.getElementById('vatBreakdownRow');
+            const vatAmountDisplay = document.getElementById('vatAmountDisplay');
+
+            const currencyRates = {
+                PHP: { symbol: '₱', rate: 1 },
+                USD: { symbol: '$', rate: 0.018 },
+                EUR: { symbol: '€', rate: 0.016 }
+            };
+
+            function updateBilling() {
+                const basePHP = parseFloat(tierSelect.value) || 0;
+                const monthlyPHP = parseFloat(maintSelect.value) || 0;
+                const months = parseInt(monthsInput.value) || 0;
+
+                let subtotalPHP = basePHP + (monthlyPHP * months);
+                const selectedCurr = currencySelect.value || 'PHP';
+                const { symbol, rate } = currencyRates[selectedCurr];
+
+                // VAT 12% calculation & Show/Hide implementation
+                if (vatToggle && vatToggle.checked) {
+                    const vatPHP = subtotalPHP * 0.12;
+                    const vatConverted = vatPHP * rate;
+                    vatAmountDisplay.textContent = symbol + Math.round(vatConverted).toLocaleString('en-US');
+                    vatBreakdownRow.style.display = 'block'; // SHOW
+                    subtotalPHP *= 1.12;
+                } else {
+                    vatBreakdownRow.style.display = 'none'; // HIDE
+                }
+
+                const finalAmount = subtotalPHP * rate;
+                totalDisplay.textContent = symbol + Math.round(finalAmount).toLocaleString('en-US');
+                
+                let desc = `Covers initial setup plus ${months} month(s) support (${selectedCurr}).`;
+                if (vatToggle && vatToggle.checked) {
+                    desc += ' Includes 12% VAT adjustment.';
+                }
+                breakdownDesc.textContent = desc;
+            }
+
+            tierSelect.addEventListener('change', updateBilling);
+            maintSelect.addEventListener('change', updateBilling);
+            monthsInput.addEventListener('input', updateBilling);
+            currencySelect.addEventListener('change', updateBilling);
+            if (vatToggle) {
+                vatToggle.addEventListener('change', updateBilling);
+            }
+
+            document.getElementById('saveLogBtn').addEventListener('click', () => {
+                alert('Billing documentation state successfully exported to system log.');
+            });
+
+            document.getElementById('inquiryForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(`Inquiry from ${usernameInput.value || 'User'} (${emailInput.value}) successfully transmitted!`);
+                e.target.reset();
+                liveUserBadge.style.display = 'none';
+            });
+
+            updateBilling();
+        });
+    </script>
+</body>
+</html>
